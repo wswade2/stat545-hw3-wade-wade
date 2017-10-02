@@ -1,0 +1,133 @@
+---
+title: "hw03"
+author: "Wade"
+date: "September 30, 2017"
+output: html_document
+---
+
+In this assignment, I will be using dplyr and ggplot2 to explore the gapminder dataset.
+
+```{r}
+suppressPackageStartupMessages(library(gapminder))
+suppressPackageStartupMessages(library(tidyverse))
+```
+
+I have a list of tasks to choose from. I will do at least 3 of them.
+
+First, let's look at how life expectancy changes on different continents.
+
+```{r}
+class(gapminder$continent)
+class(gapminder$lifeExp)
+```
+
+It's always good to check the class of the variables you are working with before you get started.
+
+```{r}
+g<-ggplot(gapminder, aes(x=continent, y=lifeExp))
+g  + geom_jitter(alpha=.5, aes(color=continent), position=position_jitter(width=.2)) +
+  labs(title="Overview of Continents")
+```
+This is a good graph showing an overview of life expectancies across each continent. But is there more information that we can glean from this dataset to answer our original question?
+
+I would like to know how the average life expectancy for each continent has changed over time.
+
+```{r}
+filter(gapminder, continent=="Africa") %>% 
+  arrange(year) %>%
+  ggplot(aes(lifeExp, year, color=(year))) +
+  coord_flip()+
+  geom_point()+
+  scale_color_gradient(low="palegreen1", high="darkgreen")+
+   theme(plot.background = element_rect(fill = 'grey'),plot.title = element_text(hjust = 0.5))+ # Center the title
+  labs(title="Africa", x= "Life Expectancy", y= "Year") #These are actually switched because I originally used the coord_flip function
+```
+
+This plot reveals something interesting. There was one entry that yielded a far lower life expectancy in Africa than all of the others. This may correspond to the <b>Rwandan genocide</b> in 1994.
+
+Let's generate comparable graphs for each of the other continents.
+
+```{r}
+filter(gapminder, continent=="Americas") %>% 
+  arrange(year) %>%
+  ggplot(aes(lifeExp, year, color=(year))) +
+  coord_flip()+
+  geom_point()+
+  scale_color_gradient(low="lightsteelblue1", high="slategrey")+
+   theme(plot.background = element_rect(fill = 'snow2'),plot.title = element_text(hjust = 0.5), panel.border = element_rect(colour = "black", fill=NA, size=1))+ #added a border
+  labs(title="Americas", x= "Life Expectancy", y= "Year")
+```
+In the Americas, there is a constant, steady increase in life expectancy. This presents real issues to the social security program, which was started in 1935 when the average life expectancy was much lower.
+
+```{r}
+filter(gapminder, continent=="Asia") %>% 
+  arrange(year) %>%
+  ggplot(aes(lifeExp, year, color=(year))) +
+  coord_flip()+
+  geom_point()+
+  scale_color_gradient(low="deeppink", high="maroon4")+
+   theme(plot.background = element_rect(fill = 'snow2'),plot.title = element_text(hjust = 0.5), panel.border = element_rect(colour = "darkred", fill=NA, size=1))+ 
+  labs(title="Asia", x= "Life Expectancy", y= "Year")
+```
+Some of the countries in Asia appear to have had consistently low life expectancies compared to the rest of the continent. After some searching, I found that Cambodia had a civil war in the 1970s.
+```{r}
+cam<-filter(gapminder, country=="Cambodia")
+knitr::kable(head(cam, format = "pandoc"))
+```
+Here we can see a large drop from their 1972 life expecancy to their 1977 life expectancy corresponding to a genocide of between 1.5-3 million people.
+
+On a lighter note, R only offers 4 shades of maroon. Now we know how Maroon 5 got its name!
+
+```{r}
+filter(gapminder, continent=="Europe") %>% 
+  arrange(year) %>%
+  ggplot(aes(lifeExp, year, color=(year))) +
+  coord_flip()+
+  geom_point()+
+  scale_color_gradient(low="aquamarine", high="aquamarine4")+
+  labs(title="Europe", x= "Life Expectancy", y= "Year")+
+  theme_bw()+
+  theme(plot.background = element_rect(fill = 'linen'),plot.title = element_text(hjust = 0.5), panel.border = element_rect(colour = "darkgreen", fill=NA, size=1)) 
+```
+
+It looks like one country in Europe has trailed far behind the others. I wonder which one it is...?
+
+```{r}
+eur<-filter(gapminder, continent=="Europe") %>% 
+  arrange(lifeExp)
+knitr::kable(head(eur, n=20) %>% arrange(year), format = "pandoc")
+```
+
+This wasn't just one country, but several. And it appears to correspond in part to the reign of the <u>Soviet Union.</u>
+
+```{r}
+filter(gapminder, continent=="Oceania") %>% 
+  arrange(year) %>%
+  ggplot(aes(lifeExp, year, color=(year))) +
+  coord_flip()+
+  geom_point()+
+  scale_color_gradient(low="orange", high="orange4")+
+  labs(title="Oceania", x= "Life Expectancy", y= "Year")+
+  theme_bw()+
+  theme(plot.background = element_rect(fill = 'floralwhite'),plot.title = element_text(hjust = 0.5), panel.border = element_rect(colour = "chocolate4", fill=NA, size=1)) 
+```
+
+It's obvious from this graph that there are very few countries from Oceania. Luckily, their life expectancies have been consistently improving.
+
+```{r results = 'asis'}
+#knitr::kable(head(africa, format = "pandoc"))
+#?knitr::kable
+```
+
+
+```{r pressure}
+#plot(pressure)
+```
+
+Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
+```{r results = 'name'}
+#knitr::kable(my_df)
+```
+
+<h3>Process</h3>
+<li>This homework was more intimidating than the previous homeworks. There was a lot more freedom.</li>
