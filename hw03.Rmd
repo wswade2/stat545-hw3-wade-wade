@@ -31,6 +31,7 @@ g<-ggplot(gapminder, aes(x=continent, y=lifeExp))
 g  + geom_jitter(alpha=.5, aes(color=continent), position=position_jitter(width=.2)) +
   labs(title="Overview of Continents")
 ```
+
 This is a good graph showing an overview of life expectancies across each continent. But is there more information that we can glean from this dataset to answer our original question?
 
 I would like to know how the average life expectancy for each continent has changed over time.
@@ -60,6 +61,7 @@ filter(gapminder, continent=="Americas") %>%
    theme(plot.background = element_rect(fill = 'snow2'),plot.title = element_text(hjust = 0.5), panel.border = element_rect(colour = "black", fill=NA, size=1))+ #added a border
   labs(title="Americas", x= "Life Expectancy", y= "Year")
 ```
+
 In the Americas, there is a constant, steady increase in life expectancy. This presents real issues to the social security program, which was started in 1935 when the average life expectancy was much lower.
 
 ```{r}
@@ -72,7 +74,9 @@ filter(gapminder, continent=="Asia") %>%
    theme(plot.background = element_rect(fill = 'snow2'),plot.title = element_text(hjust = 0.5), panel.border = element_rect(colour = "darkred", fill=NA, size=1))+ 
   labs(title="Asia", x= "Life Expectancy", y= "Year")
 ```
+
 Some of the countries in Asia appear to have had consistently low life expectancies compared to the rest of the continent. After some searching, I found that Cambodia had a civil war in the 1970s.
+
 ```{r}
 cam<-filter(gapminder, country=="Cambodia")
 knitr::kable(head(cam, format = "markdown"))
@@ -128,14 +132,16 @@ From <a href=http://www.investopedia.com/terms/t/trimmed_mean.asp>Investopedia:<
 trim_mean<-
 mutate(gapminder, trim_mean=mean(lifeExp, trim=0.25))
 ```
+
 Here, I have added a column of trimmed life expectancy means to the gapminder dataset. But it appears to have failed! I only computed one mean for the entire dataset. What we really want is a trimmed mean by year.
+
 ```{r}
 tm<-gapminder %>%
   arrange(year)%>%
   group_by(year) %>%
   summarize(mean(lifeExp, trim=0.25))
 names(tm)<-c("year","trimmed_mean")
-knitr::kable(tm)
+knitr::kable(tm, format="markdown")
 ```
 
 ```{r}
@@ -151,6 +157,7 @@ This plot seems to transition from linear to curvilinear after about 1980. I won
 <h4>Task 3</h4>
 
 Let's look at the GDP per capita spread within the continents.
+
 ```{r}
 ggplot(gapminder, aes(x=continent, y=gdpPercap))+ 
   geom_jitter(alpha=.5, aes(color=continent), position=position_jitter(width=.2)) +
@@ -163,7 +170,7 @@ Here is a snapshot of the world's GDP per capita in 1972:
 c<-select(gapminder, continent, country, year,gdpPercap) %>%
   filter(year%in% c(1972))%>%
   arrange(gdpPercap)
-knitr::kable(c)
+knitr::kable(c, format="markdown")
 ```
 
 We can tell from that table that, at least for 1972, Kuwait is one of the outliers that makes Asia's gdpPercap stand out in the graph we printed. This appears to be due to the discovery of oil in Kuwait in 1938 and a relatively small population.
