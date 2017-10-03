@@ -124,11 +124,10 @@ From <a href=http://www.investopedia.com/terms/t/trimmed_mean.asp>Investopedia:<
 "A trimmed mean is a method of averaging that removes a small designated percentage of the largest and smallest values before calculating the mean. After removing the specified observations, the trimmed mean is found using a standard arithmetic averaging formula. The use of a trimmed mean helps eliminate the influence of data points on the tails that may unfairly affect the traditional mean."
 
 ```{r}
+trim_mean<-
 mutate(gapminder, trim_mean=mean(lifeExp, trim=0.25))
 ```
-
 Here, I have added a column of trimmed life expectancy means to the gapminder dataset. But it appears to have failed! I only computed one mean for the entire dataset. What we really want is a trimmed mean by year.
-
 ```{r}
 tm<-gapminder %>%
   arrange(year)%>%
@@ -145,6 +144,7 @@ ggplot(tm, aes(year, trimmed_mean))+
   theme(plot.title = element_text(hjust = 0.5), panel.grid.minor = element_blank())+
   labs(title="Mean Life Expectancy", x="Year", y="Mean Life Expectancy (Trimmed)")
 ```
+
 This plot seems to transition from linear to curvilinear after about 1980. I wonder if the world's life expectancy will approach a limit some day...
 
 ```{r results = 'asis'}
