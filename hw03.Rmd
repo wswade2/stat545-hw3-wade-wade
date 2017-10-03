@@ -9,7 +9,7 @@ output:
 
 In this assignment, I will be using dplyr and ggplot2 to explore the gapminder dataset.
 
-```{r}
+```{r warning=FALSE}
 suppressPackageStartupMessages(library(gapminder))
 suppressPackageStartupMessages(library(tidyverse))
 ```
