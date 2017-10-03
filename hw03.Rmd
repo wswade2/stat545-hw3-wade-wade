@@ -75,7 +75,7 @@ filter(gapminder, continent=="Asia") %>%
 Some of the countries in Asia appear to have had consistently low life expectancies compared to the rest of the continent. After some searching, I found that Cambodia had a civil war in the 1970s.
 ```{r}
 cam<-filter(gapminder, country=="Cambodia")
-knitr::kable(head(cam, format = "pandoc"))
+knitr::kable(head(cam, format = "markdown"))
 ```
 
 Here we can see a large drop from their 1972 life expecancy to their 1977 life expectancy corresponding to a genocide of between 1.5-3 million people.
@@ -99,7 +99,7 @@ It looks like one country in Europe has trailed far behind the others. I wonder 
 ```{r}
 eur<-filter(gapminder, continent=="Europe") %>% 
   arrange(lifeExp)
-knitr::kable(head(eur, n=20) %>% arrange(year), format = "pandoc")
+knitr::kable(head(eur, n=20) %>% arrange(year), format = "markdown")
 ```
 
 There wasn't just one country with poor life expectancy, but several. And it appears to correspond in part to the reign of the <u>Soviet Union.</u>
@@ -173,7 +173,7 @@ We can tell from that table that, at least for 1972, Kuwait is one of the outlie
 Now, I'd like to expound on the two countries that stood out the most in the previous tasks. Let's start with Turkey:
 
 ```{r}
-knitr::kable(filter(gapminder, country=="Turkey"),format = "pandoc")
+knitr::kable(filter(gapminder, country=="Turkey"),format = "markdown")
 ```
 
 ```{r}
@@ -199,7 +199,7 @@ Now, let's look at the impact of civil war and genocide on the <b>population of 
 
 ```{r}
 cambodia<-filter(gapminder, country=="Cambodia")
-knitr::kable(cambodia, format = "pandoc")  
+knitr::kable(cambodia, format = "markdown")  
 ```
 
 ```{r}
@@ -215,21 +215,6 @@ filter(gapminder, continent=="Asia") %>%
 ```
 
 Here we can see the huge population drop caused by war. During the time between 1970 and 1980, Cambodia was involved in the <a href=https://en.wikipedia.org/wiki/Vietnam_War>Vietnam War</a> and the Cambodian Civil War.  
-
-```{r results = 'asis'}
-#knitr::kable(head(africa, format = "pandoc"))
-#?knitr::kable
-```
-
-
-```{r pressure}
-#plot(pressure)
-```
-
-Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
-```{r results = 'name'}
-#knitr::kable(my_df)
-```
 
 <h3>Process</h3>
 <li>This homework was more intimidating than the previous homeworks. There was a lot more freedom.</li>
