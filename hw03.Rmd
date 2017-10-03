@@ -163,7 +163,7 @@ Here is a snapshot of the world's GDP per capita in 1972:
 c<-select(gapminder, continent, country, year,gdpPercap) %>%
   filter(year%in% c(1972))%>%
   arrange(gdpPercap)
-knitr::kable(c, format="pandoc")
+knitr::kable(c)
 ```
 
 We can tell from that table that, at least for 1972, Kuwait is one of the outliers that makes Asia's gdpPercap stand out in the graph we printed. This appears to be due to the discovery of oil in Kuwait in 1938 and a relatively small population.
