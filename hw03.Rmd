@@ -77,6 +77,7 @@ Some of the countries in Asia appear to have had consistently low life expectanc
 cam<-filter(gapminder, country=="Cambodia")
 knitr::kable(head(cam, format = "pandoc"))
 ```
+
 Here we can see a large drop from their 1972 life expecancy to their 1977 life expectancy corresponding to a genocide of between 1.5-3 million people.
 
 On a lighter note, R only offers 4 shades of maroon. Now we know how Maroon 5 got its name!
@@ -101,7 +102,7 @@ eur<-filter(gapminder, continent=="Europe") %>%
 knitr::kable(head(eur, n=20) %>% arrange(year), format = "pandoc")
 ```
 
-This wasn't just one country, but several. And it appears to correspond in part to the reign of the <u>Soviet Union.</u>
+There wasn't just one country with poor life expectancy, but several. And it appears to correspond in part to the reign of the <u>Soviet Union.</u>
 
 ```{r}
 filter(gapminder, continent=="Oceania") %>% 
@@ -147,6 +148,74 @@ ggplot(tm, aes(year, trimmed_mean))+
 
 This plot seems to transition from linear to curvilinear after about 1980. I wonder if the world's life expectancy will approach a limit some day...
 
+<h4>Task 3</h4>
+
+Let's look at the GDP per capita spread within the continents.
+```{r}
+ggplot(gapminder, aes(x=continent, y=gdpPercap))+ 
+  geom_jitter(alpha=.5, aes(color=continent), position=position_jitter(width=.2)) +
+  labs(title="GDP by Continent")
+```
+
+Here is a snapshot of the world's GDP per capita in 1972:
+
+```{r}
+c<-select(gapminder, continent, country, year,gdpPercap) %>%
+  filter(year%in% c(1972))%>%
+  arrange(gdpPercap)
+knitr::kable(c, format="pandoc")
+```
+
+We can tell from that table that, at least for 1972, Kuwait is one of the outliers that makes Asia's gdpPercap stand out in the graph we printed. This appears to be due to the discovery of oil in Kuwait in 1938 and a relatively small population.
+
+<h4>Task 4</h4>
+
+Now, I'd like to expound on the two countries that stood out the most in the previous tasks. Let's start with Turkey:
+
+```{r}
+knitr::kable(filter(gapminder, country=="Turkey"),format = "pandoc")
+```
+
+```{r}
+turkey<-	filter(gapminder, country=="Turkey")%>%
+  select(year, lifeExp)
+
+europe<-filter(gapminder, continent=="Europe") %>% 
+  arrange(year) %>%
+  ggplot(aes(lifeExp, year, color=(year))) +
+  coord_flip()+
+  geom_point()+
+ geom_point(data = turkey, colour = "red")+
+  scale_color_gradient(low="aquamarine", high="aquamarine4")+
+  labs(title="Turkey vs Europe", x= "Life Expectancy", y= "Year")+
+  theme_bw()+
+  theme(plot.title = element_text(hjust = 0.5), panel.border = element_rect(colour = "darkgreen", fill=NA, size=1))
+europe
+```
+
+Here, I have shown Turkey (red) against a backdrop of the rest of Europe. Clearly, Turkey was going through something during this time. After some <a href=https://en.wikipedia.org/wiki/Timeline_of_the_Republic_of_Turkey>research</a> I found that Turkey participated in the Korean war from 1950-1953. Turkey's timeline displays a series of military coups, tension between church and state, and general civil unrest. This is in addition to having astronomical inflation rates historically. Turkey's life expectancy trails behind the rest of Europe even today.
+
+Now, let's look at the impact of civil war and genocide on the <b>population of Cambodia.</b>
+
+```{r}
+cambodia<-filter(gapminder, country=="Cambodia")
+knitr::kable(cambodia, format = "pandoc")  
+```
+
+```{r}
+filter(gapminder, continent=="Asia") %>% 
+  arrange(year) %>%
+  ggplot(aes(lifeExp, year, color=(year))) +
+  coord_flip()+
+  geom_point()+
+ geom_point(data = cambodia, colour = "red")+
+  labs(title="Cambodia vs Asia", x= "Population", y= "Year")+
+  theme_bw()+
+  theme(plot.title = element_text(hjust = 0.5), panel.border = element_rect(colour = "black", fill=NA, size=1))
+```
+
+Here we can see the huge population drop caused by war. During the time between 1970 and 1980, Cambodia was involved in the <a href=https://en.wikipedia.org/wiki/Vietnam_War>Vietnam War</a> and the Cambodian Civil War.  
+
 ```{r results = 'asis'}
 #knitr::kable(head(africa, format = "pandoc"))
 #?knitr::kable
@@ -165,3 +234,4 @@ Note that the `echo = FALSE` parameter was added to the code chunk to prevent pr
 <h3>Process</h3>
 <li>This homework was more intimidating than the previous homeworks. There was a lot more freedom.</li>
 <li> Once I got started, I definitely got carried away with my exploration of the dataset and the plotting options offered by ggplot2</li>
+<li>I used stack overflow quite a bit to learn the plotting functions I needed. Every time I use ggplot2 I come across some new feature that I want to use.</li>
